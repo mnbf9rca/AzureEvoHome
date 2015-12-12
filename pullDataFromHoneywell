@@ -1,0 +1,66 @@
+{
+  "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2014-12-01-preview/workflowdefinition.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "credentials": {
+      "defaultValue": {
+
+        "honeywellusername": "username",
+        "honeywellPassword": "password"
+      },
+      "type": "Object"
+    },
+    "put token map here"
+  },
+  "triggers": {
+    "recurrence": {
+      "recurrence": {
+        "frequency": "Minute",
+        "interval": 5
+      },
+      "type": "Recurrence"
+    }
+  },
+  "actions": {
+    "getToken": {
+      "type": "Http",
+      "inputs": {
+        "method": "POST",
+        "uri": "https://rs.alarmnet.com/TotalConnectComfort/WebAPI/api/Session",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "Username": "@{parameters('credentials')['honeywellusername']}",
+          "Password": "@{parameters('credentials')['honeywellPassword']}",
+          "ApplicationId": "91db1612-73fd-4500-91b2-e63b069b185c"
+        }
+      },
+      "conditions": [ ]
+    },
+    "getSensorData": {
+      "type": "Http",
+      "inputs": {
+        "method": "GET",
+        "uri": "https://rs.alarmnet.com/TotalConnectComfort/WebAPI/api/locations?userId=@{body('getToken').userInfo.userID}&allData=True",
+        "headers": {
+          "sessionId": "@{body('getToken').sessionID}"
+        }
+      },
+      "conditions": [
+        {
+          "dependsOn": "getToken"
+        }
+      ]
+    },
+    "put action to post data here": {
+      ...
+    }
+  },
+  "outputs": { }
+} {
+
+}
+{
+
+}
