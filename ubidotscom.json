@@ -1,0 +1,54 @@
+/* Go to ubidots.com and sign up. Generate a source for your data
+   and add 2 variables for each room - one for temperature and one
+   for setpoint - it doesnt matter what you name them. Fetch the
+   Variable IDs and store them in the "ThingSpeakKeyMap" object.
+  */
+
+"ubidotsKeyMap": {
+  "defaultValue": {
+    "room1Temp": "key5",
+    "room1Set": "key6",
+    "room2Temp": "key7",
+    "room2Set": "key8"
+  },
+  "type": "Object"
+}
+
+/* On Ubidots, go to profile settings > API Keys and generate an
+   authentication token. Store that as a name:value pair (example
+   below) in the Credentials parameters object.
+  */
+
+"credentials": {
+  "defaultValue": {
+    "ubidotsToken": "ubidots token",
+    "honeywellusername": "username",
+    "honeywellPassword": "password"
+  },
+  "type": "Object"
+}
+
+// and put this in to the actions section, remembering to put a comma after any existing actions
+
+    "postDataToUbidots": {
+      "repeat": "@first(body('getSensorData')).devices",
+      "type": "Http",
+      "inputs": {
+        "method": "POST",
+        "uri": "http://things.ubidots.com/api/v1.6/collections/values",
+        "headers": {
+          "Content-Type": "application/json",
+          "X-Auth-Token": "@{parameters('credentials')['ubidotsToken']}"
+        },
+        "body": [
+          {
+            "variable": "@{parameters('UbidotsKeyMap')[concat(repeatItem().name,'temp')]}",
+            "value": "@{repeatitem().thermostat.indoorTemperature}"
+          },
+          {
+            "variable": "@{parameters('UbidotsKeyMap')[concat(repeatItem().name,'set')]}",
+            "value": "@{repeatitem().thermostat.changeableValues.heatSetpoint.value}"
+          }
+        ]
+      }
+    }

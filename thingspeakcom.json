@@ -1,0 +1,24 @@
+/* Go to thingspeak.com and sign up. Generate a channel for each
+   room that you have set up in evohome and fetch the API key for 
+   each. Store them in the "ThingSpeakKeyMap" object
+  */
+
+"ThingSpeakKeyMap": {
+  "defaultValue": {
+    "room1": "key3",
+    "room2": "key4"
+  },
+  "type": "Object"
+}
+
+// and put this in to the actions section, remembering to put a comma after any existing actions
+
+"postDataThingSpeak": {
+  "repeat": "@first(body('getSensorData')).devices",
+  "type": "Http",
+  "inputs": {
+    "method": "POST",
+    "uri": "https://api.thingspeak.com/update.json?api_key=@{parameters('ThingSpeakKeyMap')[repeatItem().name]}&field1=@{repeatitem().thermostat.indoorTemperature}&field2=@{repeatitem().thermostat.changeableValues.heatSetpoint.value}"
+  },
+  "conditions": [ ]
+}

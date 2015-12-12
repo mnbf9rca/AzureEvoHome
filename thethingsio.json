@@ -1,0 +1,38 @@
+/* Go to thethings.io and sign up. Generate a thingkey for each
+   room that you have set up in evohome. Store them in the
+   "TheThingsKeyMap" object
+  */
+
+"TheThingsKeyMap": {
+  "defaultValue": {
+    "room1": "key1",
+    "room2": "key2"
+  },
+  "type": "Object"
+}
+
+// and put this in to the actions section, remembering to put a comma after any existing actions
+
+"postDataToTheThings": {
+  "repeat": "@first(body('getSensorData')).devices",
+  "type": "Http",
+  "inputs": {
+    "method": "POST",
+    "uri": "https://api.thethings.io/v2/things/@{parameters('TheThingsKeyMap')[repeatItem().name]}",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "values": [
+        {
+          "key": "indoorTemperature",
+          "value": "@{repeatitem().thermostat.indoorTemperature}"
+        },
+        {
+          "key": "setpoint",
+          "value": "@{repeatitem().thermostat.changeableValues.heatSetpoint.value}"
+        }
+      ]
+    }
+  }
+}
