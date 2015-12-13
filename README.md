@@ -1,5 +1,8 @@
 # AzureEvoHome
-Azure logic apps for connecting evohome to various IoT platforms
+Azure logic apps for connecting evohome to various IoT data aggregation platforms
+
+#limitations
+- Currently only handles evohome accounts where there is a single location. If your account has more than one location, only the first will be processed.
 
 #How to use?
 - First, sign up for Azure subscription (https://azure.microsoft.com/en-gb/pricing/free-trial/).
