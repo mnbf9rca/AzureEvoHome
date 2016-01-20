@@ -26,7 +26,7 @@
       "type": "Http",
       "inputs": {
         "method": "POST",
-        "uri": "https://rs.alarmnet.com/TotalConnectComfort/WebAPI/api/Session",
+        "uri": "https://tccna.honeywell.com/WebApi/api/Session",
         "headers": {
           "Content-Type": "application/json"
         },
@@ -42,7 +42,7 @@
       "type": "Http",
       "inputs": {
         "method": "GET",
-        "uri": "https://rs.alarmnet.com/TotalConnectComfort/WebAPI/api/locations?userId=@{body('getToken').userInfo.userID}&allData=True",
+        "uri": "https://tccna.honeywell.com/WebApi/api/locations?userId=@{body('getToken').userInfo.userID}&allData=True",
         "headers": {
           "sessionId": "@{body('getToken').sessionID}"
         }
